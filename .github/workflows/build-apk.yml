@@ -21,7 +21,7 @@ jobs:
       - name: Compilar APK
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon
+          ./gradlew assembleRelease --no-daemon -PversionCode=${{ github.run_number }}
           cp app/build/outputs/apk/release/app-release.apk SwipeClean.apk
       - uses: actions/upload-artifact@v4
         with:
@@ -33,6 +33,6 @@ jobs:
         run: |
           TAG="build-${{ github.run_number }}"
           gh release create "$TAG" SwipeClean.apk \
-            --title "SwipeClean #${{ github.run_number }}" \
+            --title "SwipeClean 1.0.${{ github.run_number }}" \
             --notes "APK compilado automáticamente desde ${{ github.sha }}." \
             --latest

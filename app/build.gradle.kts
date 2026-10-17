@@ -1,8 +1,19 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
+
+// Clave de firma fija: permite actualizar la app instalando encima sin perder el progreso.
+val signingProps = Properties().apply {
+    val f = rootProject.file("signing/signing.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+
+// Número de versión: lo pasa GitHub Actions (-PversionCode=<n.º de compilación>); local = 1.
+val appVersionCode = (project.findProperty("versionCode") as String?)?.toIntOrNull() ?: 1
 
 android {
     namespace = "com.swipeclean.app"
@@ -13,8 +24,19 @@ android {
         // Android 11+: necesario para la papelera oficial de MediaStore (createTrashRequest).
         minSdk = 30
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = appVersionCode
+        versionName = "1.0.$appVersionCode"
+    }
+
+    signingConfigs {
+        create("release") {
+            if (signingProps.isNotEmpty()) {
+                storeFile = rootProject.file("signing/" + signingProps.getProperty("storeFile"))
+                storePassword = signingProps.getProperty("storePassword")
+                keyAlias = signingProps.getProperty("keyAlias")
+                keyPassword = signingProps.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
@@ -25,9 +47,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // Uso personal: firma el release con la clave debug para poder instalarlo directamente.
-            // Para publicar en Play Store, sustituir por una clave propia.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = if (signingProps.isNotEmpty()) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 

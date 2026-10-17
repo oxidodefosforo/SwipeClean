@@ -23,11 +23,18 @@ Todo ocurre en el teléfono: sin internet, sin copias, sin modificar los origina
    - O por terminal: `./gradlew assembleRelease` → `app/build/outputs/apk/release/app-release.apk`
      (optimizado con R8 y firmado con la clave *debug*, listo para instalar en tu propio teléfono).
 
-### Alternativa sin PC: GitHub Actions
-El proyecto incluye `.github/workflows/build-apk.yml`. Sube la carpeta a un repositorio de GitHub
-(privado sirve) y en la pestaña **Actions** se compila solo; descarga el artefacto **SwipeClean-apk**.
-Nota: cada compilación en la nube usa una clave debug distinta, así que para actualizar
-tendrás que desinstalar la versión anterior (perderías el progreso guardado).
+### Compilación automática (GitHub Actions)
+Cada `push` a `main` compila el APK y lo publica en **Releases** con versión `1.0.<n.º de compilación>`:
+https://github.com/oxidodefosforo/SwipeClean/releases/latest
+
+### Actualizar la app
+Todas las versiones se firman con la misma clave (`signing/`), así que el APK nuevo se instala
+**encima** del anterior y se conserva el progreso. Dentro de la app: **Buscar actualizaciones**
+(al final de la pantalla inicial) abre la página de Releases. La app no tiene permiso de Internet,
+por eso la descarga la hace el navegador.
+
+> La clave está dentro del repositorio porque es privado y de uso personal. Si lo haces público,
+> mueve `signing/` a GitHub Secrets antes. Si pierdes la clave, tendrás que desinstalar para actualizar.
 
 ## 2. Instalar en el Samsung Galaxy
 

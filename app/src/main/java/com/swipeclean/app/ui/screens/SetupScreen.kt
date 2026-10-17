@@ -29,10 +29,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.swipeclean.app.Access
+import com.swipeclean.app.Updates
 import com.swipeclean.app.data.SortOrder
 import com.swipeclean.app.ui.MainViewModel
 import com.swipeclean.app.ui.formatBytes
@@ -159,6 +161,25 @@ fun SetupScreen(vm: MainViewModel, onRequestMoreAccess: () -> Unit) {
         Spacer(Modifier.height(4.dp))
         TextButton(onClick = { confirmReset = true }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Text("Reiniciar progreso", color = TextDim)
+        }
+
+        val context = LocalContext.current
+        val version = remember { Updates.currentVersion(context) }
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Surface2)
+                .clickable { Updates.openReleases(context) }
+                .padding(16.dp)
+        ) {
+            Text("Buscar actualizaciones", fontWeight = FontWeight.SemiBold)
+            Text(
+                "Versión instalada: $version. Abre GitHub para descargar la última versión; " +
+                    "instálala encima y conservarás tu progreso.",
+                color = TextDim,
+                fontSize = 13.sp,
+            )
         }
     }
 
