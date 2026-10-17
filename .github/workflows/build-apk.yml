@@ -2,7 +2,11 @@ name: Build APK
 
 on:
   push:
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -18,7 +22,17 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew assembleRelease --no-daemon
+          cp app/build/outputs/apk/release/app-release.apk SwipeClean.apk
       - uses: actions/upload-artifact@v4
         with:
           name: SwipeClean-apk
-          path: app/build/outputs/apk/release/*.apk
+          path: SwipeClean.apk
+      - name: Publicar en Releases (enlace directo para el teléfono)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="build-${{ github.run_number }}"
+          gh release create "$TAG" SwipeClean.apk \
+            --title "SwipeClean #${{ github.run_number }}" \
+            --notes "APK compilado automáticamente desde ${{ github.sha }}." \
+            --latest
