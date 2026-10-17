@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dos tarjetas inclinadas: la trasera roja y la delantera verde con un check. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group android:pivotX="54" android:pivotY="54" android:rotation="-12">
+        <path
+            android:fillColor="#FF453A"
+            android:pathData="M40,32h24a5,5 0,0 1,5 5v34a5,5 0,0 1,-5 5h-24a5,5 0,0 1,-5 -5v-34a5,5 0,0 1,5 -5z" />
+    </group>
+    <group android:pivotX="54" android:pivotY="54" android:rotation="10">
+        <path
+            android:fillColor="#32D74B"
+            android:pathData="M44,30h24a5,5 0,0 1,5 5v34a5,5 0,0 1,-5 5h-24a5,5 0,0 1,-5 -5v-34a5,5 0,0 1,5 -5z" />
+        <path
+            android:fillColor="#00000000"
+            android:strokeColor="#FF0D0E11"
+            android:strokeWidth="4.5"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:pathData="M48,53l6,6l11,-13" />
+    </group>
+</vector>
